@@ -14,6 +14,7 @@ const userSchema = new Schema({
     required: true
   }
 })
+
 // On Save Hook, encrypt password
 // "pre" -> Before saving a model, run this function
 userSchema.pre('save', function (next) {
@@ -37,6 +38,14 @@ userSchema.pre('save', function (next) {
     })
   })
 })
+
+userSchema.methods.comparePassword = function (candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+    if(err) { return callback(err); }
+
+    callback(null, isMatch);
+  })
+}
 
 const User = mongoose.model('User', userSchema);
 
