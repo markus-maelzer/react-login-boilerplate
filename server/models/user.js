@@ -19,18 +19,16 @@ const userSchema = new Schema({
 userSchema.pre('save', function (next) {
   // get access to the user model
   const user = this;
-  console.log('user', user);
+  // console.log('user', user)
 
   // generate a salt
-  bcrypt.genSalt(10, (err, salt) => {
+  bcrypt.genSalt(10, function (err, salt) {
     if(err) {
-      console.log('ERROR: ', err);
       return next(err);
     }
 
-
     // has (encrypt) the password using salt
-    bcrypt.hash(user.password, salt, (err, hash) => {
+    bcrypt.hash(user.password, salt, function (err, hash) {
       if(err) {return next(err);}
 
       // overwrite plain text password with encrypted password
