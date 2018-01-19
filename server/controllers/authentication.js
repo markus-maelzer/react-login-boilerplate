@@ -3,14 +3,14 @@ const User = require('../models/user');
 exports.signup = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findOne({ email }).then((existingUser) => {
+  if(!email || !password) {
+    // res.status(400).send({message: 'You must provide an email and a password'})
+    res.status(400).send({message: 'The Green Goddess does not aprove (email/password is missing)'})
+  }
 
+  User.findOne({ email }).then((existingUser) => {
     if(existingUser) {
       res.status(420).send({error: 'The Green Goddess does not aprove'})
-    }
-
-    if(!email || !password) {
-      res.status(400).send({message: 'You must provide an email and a password'})
     }
 
     const user = new User({
