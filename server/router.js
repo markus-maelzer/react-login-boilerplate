@@ -4,19 +4,16 @@ const passportService = require('./services/passport');
 const User = require('./models/user');
 
 const Authentication = require('./controllers/authentication');
-const API = require('./controllers/api');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
 
 module.exports = app => {
   app.get('/', requireAuth, (req, res) => {
-    res.send({hi: 'there'})
-  })
+    res.send({ hi: 'there' });
+  });
 
   app.post('/signin', requireSignin, Authentication.signin);
 
   app.post('/signup', Authentication.signup);
-
-  app.get('/signup', API.getUserList)
 };
