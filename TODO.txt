@@ -5,3 +5,9 @@ no token on signup für admin user creation
 
 REFACTOR comparePassword function in server/models/user.js
 --> make it a Promise cuz reasons >_>
+
+
+
+
+FRONTEND
+ADD VALIDATION FUNCTION
