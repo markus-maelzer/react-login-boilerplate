@@ -26,14 +26,14 @@ exports.signup = (req, res, next) => {
 
   // check if email and password exist
   if(!email || !password) {
-    res.status(400).send({message: 'The Green Goddess does not aprove (email/password is missing)'})
+    return res.status(400).send({message: 'The Green Goddess does not aprove (email/password is missing)'})
   }
 
   // See if a user with the given email exists
   User.findOne({ email }).then((existingUser) => {
     // If a user with email exists, return error
     if(existingUser) {
-      return res.status(420).send({error: 'The Green Goddess does not aprove (email already exists)'});
+      return res.status(422).send({error: 'The Green Goddess does not aprove (email already exists)'});
     }
 
     // if user with email does NOT exist, create and save user record

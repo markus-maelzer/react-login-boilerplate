@@ -3,6 +3,7 @@ import {
   AUTH_USER,
   UNAUTH_USER,
   AUTH_ERROR,
+  FETCH_MESSAGE
 } from './types';
 
 const ROOT_URL = 'http://localhost:3001';
@@ -20,7 +21,8 @@ export const signinUser = ({ email, password }, callback) => {
         // - redirect to the route '/feature'
         callback('/feature');
       })
-      .catch( () => {
+      .catch((e) => {
+        console.log(e);
         // if request is bad...
         // - Show an error to the user≈
         dispatch(authError('Bad Login Info'));
@@ -36,24 +38,41 @@ export const signupUser = ({ email, password }, callback) => {
         localStorage.setItem('token', res.data.token)
         callback('/feature');
       })
-      .catch((e) => {
-        dispatch(authError(e.message));
+      .catch((res) => {
+        console.log(res);
+        dispatch(authError(res.response.data.error));
       })
   }
 }
 
-
 export const authError = error => {
+  console.log(error);
   return {
     type: AUTH_ERROR,
     payload: error
   }
 }
 
-
 export const signoutUser = () => {
   localStorage.removeItem('token');
   return {
     type: UNAUTH_USER
   };
+}
+
+export const fetchMessage = () => {
+  return dispatch => {
+    axios.get(ROOT_URL, {
+      headers: { authorization: localStorage.getItem('token') }
+    })
+      .then( res => {
+        dispatch({
+          type: FETCH_MESSAGE,
+          payload: res.data.message
+        })
+      })
+      .catch( res => {
+        dispatch(authError('UNAUTHORIZED'));
+      })
+  }
 }
